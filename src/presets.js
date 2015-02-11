@@ -422,4 +422,6 @@ jfxr.Preset.all = function() {
   ];
 };
 
-jfxrApp.service('allPresets', [jfxr.Preset.all]);
+if (typeof jfxrApp !== "undefined") {
+  jfxrApp.service('allPresets', [jfxr.Preset.all]);
+};

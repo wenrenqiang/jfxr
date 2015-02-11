@@ -1,12 +1,20 @@
-jfxrApp.service('synthFactory', ['$q', '$timeout', function($q, $timeout) {
-  return function(str) {
-    return new jfxr.Synth($q, $timeout, str);
-  };
-}]);
+if (typeof jfxrApp !== "undefined") {
+  jfxrApp.service('synthFactory', ['$q', '$timeout', function($q, $timeout) {
+    return function(str) {
+      return new jfxr.Synth($q, $timeout, str);
+    };
+  }]);
+}
 
 jfxr.Synth = function($q, $timeout, json) {
-  this.$q = $q;
-  this.$timeout = $timeout;
+  if (typeof jfxrApp !== "undefined") {
+    this.$q = $q;
+    this.$timeout = $timeout;
+  } else {
+    // headless just takes json
+    json = $q;
+  }
+
   this.sound = new jfxr.Sound();
   this.sound.parse(json);
 
@@ -40,15 +48,30 @@ jfxr.Synth = function($q, $timeout, json) {
   this.blockSize = 10240;
 };
 
-jfxr.Synth.prototype.run = function() {
-  if (this.deferred) {
-    return this.deferred.promise;
+if (typeof jfxrApp !== "undefined") {
+  jfxr.Synth.prototype.run = function() {
+    if (this.deferred) {
+      return this.deferred.promise;
+    }
+    this.running = true;
+    this.deferred = this.$q.defer();
+    var promise = this.deferred.promise;
+    this.tick();
+    return promise;
+  };
+} else {
+  jfxr.Synth.prototype.run = function() {
+    this.tickOnce();
+    return this;
+  };
+}
+
+jfxr.Synth.prototype.tickOnce = function() {
+  var numSamples = this.array.length;
+  for (var i = 0; i < this.transformers.length; i++) {
+    // do all at once
+    this.transformers[i].run(this.sound, this.array, this.startSample, numSamples);
   }
-  this.running = true;
-  this.deferred = this.$q.defer();
-  var promise = this.deferred.promise;
-  this.tick();
-  return promise;
 };
 
 jfxr.Synth.prototype.tick = function() {
