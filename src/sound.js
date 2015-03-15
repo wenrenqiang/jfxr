@@ -504,7 +504,8 @@ jfxr.Sound.prototype.serialize = function() {
 jfxr.Sound.prototype.parse = function(str) {
   this.reset();
   if (str && str !== '') {
-    var json = JSON.parse(str);
+    // check for already parsed json (from oboe)
+    var json = (typeof str == 'object') ? str : JSON.parse(str);
     if (json._version > jfxr.VERSION) {
       throw new Error('Cannot read this sound; it was written by jfxr version ' + json._version +
           ' but we support only up to version ' + jfxr.VERSION + '. Please update jfxr.');
