@@ -1,3 +1,5 @@
+var jfxr = global.jfxr;
+
 // A fast, but not crytographically strong xorshift PRNG, to make up for
 // the lack of a seedable random number generator in JavaScript.
 // If seed is 0 or undefined, the current time is used.

@@ -1,3 +1,5 @@
+var jfxr = global.jfxr;
+
 jfxr.Preset = function(args) {
   this.name = args.name;
   this.applyTo = args.applyTo || null;

@@ -1,3 +1,5 @@
+var jfxr = global.jfxr;
+
 jfxr.Parameter = function(args) {
   this.label = args.label || '<unnamed>';
   this.unit = args.unit || '';

@@ -1,3 +1,5 @@
+var jfxr = global.jfxr;
+
 if (typeof jfxrApp !== "undefined") {
   jfxrApp.service('synthFactory', ['$q', '$timeout', function($q, $timeout) {
     return function(str) {

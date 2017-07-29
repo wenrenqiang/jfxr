@@ -1,3 +1,5 @@
+var jfxr = global.jfxr;
+
 jfxr.Math = jfxr.Math || {};
 
 // stackoverflow.com/questions/21363064/chrome-chromium-doesnt-know-javascript-function-math-sign
